@@ -27,11 +27,11 @@ min_date = df['FechaVta'].dropna().min() if 'FechaVta' in df.columns else None
 max_date = df['FechaVta'].dropna().max() if 'FechaVta' in df.columns else None
 
 if min_date is None or max_date is None:
-    date_range = st.sidebar.date_input("Rango fechas (no hay fechas válidas)")
+    date_range = st.sidebar.date_input("Rango de fechas (no hay fechas válidas)")
 else:
-    date_range = st.sidebar.date_input("Rango fechas", value=(min_date, max_date))
+    date_range = st.sidebar.date_input("Rango de fechas", value=(min_date, max_date))
 
-exclude_invalid_dates = st.sidebar.checkbox("Excluir registros con FechaVta inválida", value=True)
+exclude_invalid_dates = st.sidebar.checkbox("Excluir registros con Fecha de Venta inválida", value=True)
 
 # Métrica de revenue (fija a VtaFacturada según solicitud)
 rev_key = 'vta'
@@ -138,7 +138,7 @@ avg_ticket = total_rev / num_invoices if num_invoices else 0
 col1.metric("Ventas totales (moneda)", f"{total_rev:,.2f}")
 col2.metric("Unidades vendidas", f"{int(total_units) if pd.notna(total_units) else 0}")
 col3.metric("Nº de registros (facturas)", f"{num_invoices}")
-col4.metric("Ticket medio", f"{avg_ticket:,.2f}")
+col4.metric("Venta promedio", f"{avg_ticket:,.2f}")
 
 # Indicador de registros con fecha inválida
 if 'FechaVta_valid' in df.columns:
@@ -153,7 +153,7 @@ st.subheader("Ventas en el tiempo")
 if 'FechaVta' in filtered.columns and filtered['FechaVta'].notna().any():
     # usar 'ME' (month end) en lugar de 'M' para evitar warning de pandas
     ts = filtered.set_index('FechaVta').resample('ME')['revenue_used'].sum().reset_index()
-    fig_ts = px.line(ts, x='FechaVta', y='revenue_used', title='Ventas mensuales', labels={'revenue_used': 'Revenue'})
+    fig_ts = px.line(ts, x='FechaVta', y='revenue_used', title='Ventas mensuales', labels={'FechaVta': 'Fecha de Venta', 'revenue_used': 'Facturación'})
     st.plotly_chart(fig_ts, width='stretch')
 else:
     st.info("No hay fechas válidas para la serie temporal con los filtros actuales.")
@@ -163,25 +163,25 @@ left, right = st.columns([2,1])
 with left:
     st.subheader("Top productos por venta")
     top_prod = filtered.groupby('producto')['revenue_used'].sum().sort_values(ascending=False).head(15).reset_index()
-    fig_bar = px.bar(top_prod, x='revenue_used', y='producto', orientation='h', title='Top productos (por revenue)')
+    fig_bar = px.bar(top_prod, x='revenue_used', y='producto', orientation='h', title='Top productos (por facturación)', labels={'revenue_used': 'Facturación', 'producto': 'Producto'})
     st.plotly_chart(fig_bar, width='stretch')
 
     st.subheader("Top clientes")
     top_cli = filtered.groupby('cliente')['revenue_used'].sum().sort_values(ascending=False).head(15).reset_index()
-    fig_cli = px.bar(top_cli, x='revenue_used', y='cliente', orientation='h', title='Top clientes (por revenue)')
+    fig_cli = px.bar(top_cli, x='revenue_used', y='cliente', orientation='h', title='Top clientes (por facturación)', labels={'revenue_used': 'Facturación', 'cliente': 'Cliente'})
     st.plotly_chart(fig_cli, width='stretch')
 
     # Agregaciones por ciudad / zona
     if 'ciudad' in filtered.columns:
         st.subheader("Ventas por ciudad")
         by_city = filtered.groupby('ciudad')['revenue_used'].sum().sort_values(ascending=False).reset_index()
-    fig_city = px.bar(by_city.head(20), x='revenue_used', y='ciudad', orientation='h', title='Top ciudades por revenue')
+    fig_city = px.bar(by_city.head(20), x='revenue_used', y='ciudad', orientation='h', title='Top ciudades (por facturación)', labels={'revenue_used': 'Facturación', 'ciudad': 'Ciudad'})
     st.plotly_chart(fig_city, width='stretch')
 
     if 'zona' in filtered.columns:
         st.subheader("Ventas por zona")
         by_zone = filtered.groupby('zona')['revenue_used'].sum().sort_values(ascending=False).reset_index()
-    fig_zone = px.bar(by_zone.head(20), x='revenue_used', y='zona', orientation='h', title='Top zonas por revenue')
+    fig_zone = px.bar(by_zone.head(20), x='revenue_used', y='zona', orientation='h', title='Top zonas (por facturación)', labels={'revenue_used': 'Facturación', 'zona': 'Zona'})
     st.plotly_chart(fig_zone, width='stretch')
 
 with right:
@@ -240,8 +240,8 @@ if 'Costo' in filtered.columns and 'revenue_used' in filtered.columns:
     mcol1, mcol2 = st.columns(2)
     mcol1.metric("Margen total", f"{total_margin:,.2f}")
     mcol2.metric("% Margen sobre ventas", f"{(margin_pct*100):.2f}%")
-
-    st.write("Top productos por margen")
+    
+    # Top productos por margen
     top_margin = (
         pd.DataFrame({'producto': filtered['producto'], 'margin': margin_series})
         .dropna(subset=['producto'])
@@ -251,16 +251,10 @@ if 'Costo' in filtered.columns and 'revenue_used' in filtered.columns:
         .head(15)
         .reset_index()
     )
-    fig_margin = px.bar(top_margin, x='margin', y='producto', orientation='h')
+    fig_margin = px.bar(top_margin, x='margin', y='producto', orientation='h', title='Top productos por margen', labels={'margin': 'Margen', 'producto': 'Producto'})
     st.plotly_chart(fig_margin, width='stretch')
 
-    st.caption("Nota: el margen se calcula como (ventas usadas - costo). La métrica de ventas usada en el dashboard es la facturada.")
-
-st.subheader("Tabla filtrada y descarga")
-st.dataframe(filtered.sample(min(200, len(filtered))))
-
-csv = filtered.to_csv(index=False, sep=';')
-st.download_button(label="Descargar CSV filtrado", data=csv, file_name='ventas_filtradas.csv', mime='text/csv')
+    st.caption("Nota: el margen se calcula como (ventas - costo).")
 
 st.markdown("---")
-st.caption("Dashboard generado con Streamlit — columnas detectadas: " + ", ".join(df.columns[:10]))
+st.caption("Dashboard generado con Streamlit — Santa Cruz de la Sierra, Bolivia. 5 de noviembre de 2025.")
