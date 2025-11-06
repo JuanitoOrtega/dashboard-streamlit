@@ -1,4 +1,18 @@
-# Dashboard de Ventas - Farmacias
+# Trabajo final Módulo Data Visualization and Visual Analytics - MIAV1E3
+
+# Maestría Ciencia de Datos e Inteligencia Artificial
+
+Maestrantes
+```bash
+# JUANITO ORTEGA GUZMAN
+# CRISTHIAN GERARDO BARRANCOS HARRIAGUE
+# ERIKA MILENKA URIONA URQUIETA 
+# RONAL SILVIO CALLISAYA MERLO
+# GROVER STEVEN VALVERDE SAAVEDRA
+# PERSEO ANDRADE MERCADO
+```
+
+## Dashboard de Ventas
 
 Dashboard interactivo en Python usando Streamlit para visualizar métricas y ubicaciones de clientes (farmacias).
 
@@ -26,7 +40,3 @@ Qué incluye
 - Top productos y top clientes por revenue.
 - Mapa con ubicaciones (lat/lon) extraídas de la columna `Georeferenciado`.
 - Descarga del CSV filtrado.
-
-Notas
-- El CSV fuente está en `data/TblVenta_demo.csv` y usa `;` como separador.
-- Si necesita métricas adicionales (márgenes, cohortes, forecast), puedo extender el dashboard.
