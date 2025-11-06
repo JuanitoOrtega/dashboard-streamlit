@@ -59,6 +59,18 @@ with st.sidebar.expander("Avanzado / Mapa", expanded=False):
     show_points = st.checkbox("Mostrar puntos individuales en el mapa", value=False)
     heatmap_radius = st.slider("Radio heatmap (px)", min_value=10, max_value=200, value=50)
 
+# Información del equipo (maestría)
+with st.sidebar.expander("Equipo / Curso", expanded=False):
+    st.markdown("**Módulo:** Data Visualization and Visual Analytics - MIAV1E3")
+    st.markdown("**Maestría:** Ciencia de Datos e Inteligencia Artificial")
+    st.write("**Miembros del grupo:**")
+    st.write("- JUANITO ORTEGA GUZMAN")
+    st.write("- CRISTHIAN GERARDO BARRANCOS HARRIAGUE")
+    st.write("- ERIKA MILENKA URIONA URQUIETA")
+    st.write("- RONAL SILVIO CALLISAYA MERLO")
+    st.write("- GROVER STEVEN VALVERDE SAAVEDRA")
+    st.write("- PERSEO ANDRADE MERCADO")
+
 
 # Apply filters
 filtered = df.copy()

@@ -1,22 +1,25 @@
-# Trabajo final Módulo Data Visualization and Visual Analytics - MIAV1E3
+# Trabajo final — Módulo
 
-# Maestría Ciencia de Datos e Inteligencia Artificial
+Data Visualization and Visual Analytics - MIAV1E3
 
-Maestrantes
-```bash
-# JUANITO ORTEGA GUZMAN
-# CRISTHIAN GERARDO BARRANCOS HARRIAGUE
-# ERIKA MILENKA URIONA URQUIETA 
-# RONAL SILVIO CALLISAYA MERLO
-# GROVER STEVEN VALVERDE SAAVEDRA
-# PERSEO ANDRADE MERCADO
-```
+Maestría en Ciencia de Datos e Inteligencia Artificial
+
+## Equipo
+Miembros del grupo:
+
+- JUANITO ORTEGA GUZMAN
+- CRISTHIAN GERARDO BARRANCOS HARRIAGUE
+- ERIKA MILENKA URIONA URQUIETA
+- RONAL SILVIO CALLISAYA MERLO
+- GROVER STEVEN VALVERDE SAAVEDRA
+- PERSEO ANDRADE MERCADO
 
 ## Dashboard de Ventas
 
-Dashboard interactivo en Python usando Streamlit para visualizar métricas y ubicaciones de clientes (farmacias).
+> Dashboard interactivo en Python usando Streamlit para visualizar métricas y ubicaciones de clientes (farmacias).
 
 Requisitos
+
 - Python 3.8+ (se recomienda usar el virtualenv provisto en `env/`)
 - Instalar dependencias en `requirements.txt`
 
@@ -35,6 +38,7 @@ streamlit run app.py
 ```
 
 Qué incluye
+
 - KPIs: ventas totales, unidades, número de registros y ticket medio.
 - Series temporales de ventas por mes.
 - Top productos y top clientes por revenue.
